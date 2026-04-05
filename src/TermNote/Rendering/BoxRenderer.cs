@@ -3,31 +3,84 @@ namespace TermNote.Rendering;
 
 public static class BoxRenderer
 {
-  public static string Render(Note note, int width = 50)
+  // ANSI escape codes for styling
+  private const string Reset = "\x1b[0m";
+  private const string Bold = "\x1b[1m";
+  private const string Dim = "\x1b[2m";
+  private const string Cyan = "\x1b[36m";
+  private const string Yellow = "\x1b[33m";
+  private const string Green = "\x1b[32m";
+  private const string White = "\x1b[37m";
+  private const string BrightBlack = "\x1b[90m";
+
+
+  // Box drawing characters
+  private const char TopLeft = '╭';
+  private const char TopRight = '╮';
+  private const char BottomLeft = '╰';
+  private const char BottomRight = '╯';
+  private const char Horizontal = '─';
+  private const char Vertical = '│';
+
+  public static void Render(IReadOnlyList<Note> notes, int maxWidth = 60)
   {
-    var contentLines = SplitContent(note.Content, width - 4); // Account for borders
-    var age = note.GetAge();
-    var header = $" {note.Id} - {age} ";
-    var topBorder = "┌" + new string('─', width - 2) + "┐";
-    var bottomBorder = "└" + new string('─', width - 2) + "┘";
-    var renderedContent = contentLines.Select(line => $"│ {line.PadRight(width - 4)} │");
-    return string.Join(Environment.NewLine, new[] { topBorder, header }.Concat(renderedContent).Concat(new[] { bottomBorder }));
+
+    if (notes.Count == 0)
+      return;
+
+    var innerWidth = maxWidth - 4;
+
+    var topBorder = $"{Dim}{TopLeft}{new string(Horizontal, maxWidth - 2)}{TopRight}{Reset}";
+    var bottomBorder = $"{Dim}{BottomLeft}{new string(Horizontal, maxWidth - 2)}{BottomRight}{Reset}";
+    var titleLine = FormatCentered($"📌 termnote ({notes.Count})", innerWidth);
+
+    Console.WriteLine(topBorder);
+
+    Console.WriteLine();
+    Console.WriteLine($"{Dim}{Vertical}{Reset} {Bold}{Cyan}{titleLine}{Reset} {Dim}{Vertical}{Reset}");
+    Console.WriteLine($"{Dim}{Vertical}{Reset} {new string(Horizontal, innerWidth)} {Dim}{Vertical}{Reset}");
+
+    foreach (var note in notes)
+    {
+      var contentLine = FormatNote(note, innerWidth);
+      Console.WriteLine($"{Dim}{Vertical}{Reset} {contentLine} {Dim}{Vertical}{Reset}");
+
+      Console.WriteLine(bottomBorder);
+    }
   }
 
-  private static IEnumerable<string> SplitContent(string content, int maxWidth)
+  private static string FormatCentered(string text, int width)
   {
-    var words = content.Split(' ');
-    var line = "";
-    foreach (var word in words)
-    {
-      if ((line + word).Length > maxWidth)
-      {
-        yield return line.TrimEnd();
-        line = "";
-      }
-      line += word + " ";
-    }
-    if (!string.IsNullOrWhiteSpace(line))
-      yield return line.TrimEnd();
+    var visibleLength = text.Length;
+    if (visibleLength >= width) return text;
+
+    var leftPad = (width - visibleLength) / 2;
+    var rightPad = width - visibleLength - leftPad;
+
+    return new string(' ', leftPad) + text + new string(' ', rightPad);
   }
+
+  private static string FormatNote(Note note, int innerWidth)
+  {
+    var idTag = $"{BrightBlack}{note.Id[..4]}{Reset}";
+    var age = $"{BrightBlack}{note.GetAge()}{Reset}";
+    var suffix = $" {idTag} {Dim}·{Reset} {age}";
+    var suffixVisible = $" {note.Id[..4]} · {note.GetAge()}";
+    var maxContent = innerWidth - suffixVisible.Length;
+
+    var content = note.Content.Length > maxContent
+        ? note.Content[..(maxContent - 1)] + "…"
+        : note.Content;
+
+    var padding = innerWidth - content.Length - suffixVisible.Length;
+    var pad = padding > 0 ? new string(' ', padding) : "";
+
+    return $"{White}{content}{Reset}{pad}{suffix}";
+  }
+
+  public static void RenderInline(Note note)
+  {
+    Console.WriteLine($"  {BrightBlack}[{note.Id}]{Reset} {note.Content}");
+  }
+
 }
