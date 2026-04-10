@@ -1,5 +1,6 @@
-﻿// See https://aka.ms/new-console-template for more information
-using TermNote.Models;
+﻿using TermNote.Commands;
+using TermNote.Services;
 
-var note = new Note("This is a test note.");
-Console.WriteLine(note);
+var store = new NoteStore();
+var handler = new CommandHandler(store);
+return handler.Execute(args);
