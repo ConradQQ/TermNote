@@ -1,6 +1,12 @@
 ﻿using TermNote.Commands;
 using TermNote.Services;
 
-var store = new NoteStore();
-var handler = new CommandHandler(store);
-return handler.Execute(args);
+class Program
+{
+    static int Main(string[] args)
+    {
+        var store = new NoteStore();
+        var handler = new CommandHandler(store);
+        return handler.Execute(args);
+    }
+}
