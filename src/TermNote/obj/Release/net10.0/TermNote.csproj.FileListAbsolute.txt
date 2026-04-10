@@ -1,0 +1,15 @@
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/TermNote
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/TermNote.deps.json
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/TermNote.runtimeconfig.json
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/TermNote.dll
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/TermNote.pdb
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.GeneratedMSBuildEditorConfig.editorconfig
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.AssemblyInfoInputs.cache
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.AssemblyInfo.cs
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.csproj.CoreCompileInputs.cache
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.sourcelink.json
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.dll
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/refint/TermNote.dll
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.pdb
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/TermNote.genruntimeconfig.cache
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/obj/Release/net10.0/ref/TermNote.dll

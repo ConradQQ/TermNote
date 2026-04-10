@@ -1,0 +1,5 @@
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/publish/TermNote
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/publish/TermNote.dll
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/publish/TermNote.deps.json
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/publish/TermNote.runtimeconfig.json
+/home/djinn/Documents/dev/myrepos/TermNote/src/TermNote/bin/Release/net10.0/publish/TermNote.pdb
