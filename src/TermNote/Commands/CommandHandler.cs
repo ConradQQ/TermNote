@@ -6,10 +6,12 @@ namespace TermNote.Commands;
 public class CommandHandler
 {
   private readonly NoteStore _store;
+  private readonly IRenderer _renderer;
 
-  public CommandHandler(NoteStore store)
+  public CommandHandler(NoteStore store, IRenderer renderer)
   {
     _store = store;
+    _renderer = renderer;
 
   }
 
@@ -41,7 +43,7 @@ public class CommandHandler
   // Method for showing current notes in the terminal
   private int HandleShow()
   {
-    BoxRenderer.Render(_store.GetAll());
+    _renderer.Render(_store.GetAll());
     return 0;
   }
 
@@ -59,7 +61,7 @@ public class CommandHandler
     var note = _store.Add(content);
 
     Console.WriteLine($"  \x1b[32m✓\x1b[0m Note added:");
-    BoxRenderer.RenderInline(note);
+    _renderer.RenderInline(note);
 
     return 0;
   }
