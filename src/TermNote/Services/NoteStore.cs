@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Xml.Linq;
 using TermNote.Models;
 
 namespace TermNote.Services; 
@@ -9,37 +7,24 @@ public class NoteStore
   
   // Private fields _ the internal state of this object|
   // Outside code cannot see o rtouch these
-  private readonly string _filePath;
   private readonly List<Note> _notes;
-
+  private readonly IStorageProvider _storage;
   // Static property _ belongs to the class itself, not to any instance
   // Figures out the right config directory for any OS
-  public static string DefaultDirectory
-  {
-    get
-    {
-      var xdgConfig = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
-      var configBase = !string.IsNullOrEmpty(xdgConfig)
-        ? xdgConfig
-        : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config");
 
-      return Path.Combine(configBase, "TermNote");
-    }
-  }
 
-  public NoteStore(string? directory = null)
+  public NoteStore(IStorageProvider storage)
   {
-    var dir = directory ?? DefaultDirectory;
-    Directory.CreateDirectory(dir); // Ensure the directory exists
-    _filePath = Path.Combine(dir, "notes.json");
-    _notes = Load();
+    _notes = storage.Load();
+    _storage = storage;
+
   }
 
   public Note Add(string content)
   {
     var note = new Note(content);
     _notes.Add(note);
-    Save();
+    _storage.Save(_notes);
     return note;
   }
 
@@ -49,7 +34,7 @@ public class NoteStore
     if (note is null) return false;
 
     _notes.Remove(note);
-    Save();
+    _storage.Save(_notes);
     return true;
   }
 
@@ -59,7 +44,7 @@ public class NoteStore
     if (note is null) return false;
 
     note.Content = newContent;
-    Save();
+    _storage.Save(_notes);
     return true;
   }
   
@@ -82,38 +67,4 @@ public class NoteStore
 
   }
 
-  private void Save()
-  {
-    var options = new JsonSerializerOptions
-    {
-      WriteIndented = true,
-      PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
-    var json = JsonSerializer.Serialize(_notes, options);
-    File.WriteAllText(_filePath, json);
-  }
-
-    private List<Note> Load()
-    {
-        if (!File.Exists(_filePath))
-            return new List<Note>();
-
-        try
-        {
-            var json = File.ReadAllText(_filePath);
-            var options = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
-
-            return JsonSerializer.Deserialize<List<Note>>(json, options)
-                ?? new List<Note>();
-        }
-        catch (JsonException)
-        {
-            // Corrupted file — start fresh rather than crash
-            return new List<Note>();
-        }
-    } 
 }
