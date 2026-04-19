@@ -1,5 +1,7 @@
 using TermNote.Rendering;
 using TermNote.Services;
+using TermNote.Models;
+using System.Text.Json;
 
 namespace TermNote.Commands;
 
@@ -7,12 +9,13 @@ public class CommandHandler
 {
   private readonly NoteStore _store;
   private readonly IRenderer _renderer;
+  private readonly Config _config;
 
-  public CommandHandler(NoteStore store, IRenderer renderer)
+  public CommandHandler(NoteStore store, IRenderer renderer, Config config)
   {
     _store = store;
     _renderer = renderer;
-
+    _config = config;
   }
 
   public int Execute(string[] args)
@@ -34,6 +37,7 @@ public class CommandHandler
       "edit" or "e" => HandleEdit(commandArgs),
       "show" or "s" => HandleShow(),
       "clear" => HandleClear(),
+      "config" => HandleConfig(),
       "help" or "h" or "--help" or "-h" => HandleHelp(),
       "version" or "--version" or "-v" => HandleVersion(),
       _ => HandleUnknown(command),
@@ -154,6 +158,19 @@ public class CommandHandler
     }
 
     Console.WriteLine($"  \x1b[32m✓\x1b[0m Cleared {count} note(s).");
+    return 0;
+  }
+
+  // Method for printing config contents to the terminal
+  private int HandleConfig()
+  {
+    var options = new JsonSerializerOptions
+    {
+      WriteIndented = true,
+      PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
+    string json = JsonSerializer.Serialize(_config, options);
+    Console.WriteLine(json);
     return 0;
   }
 
