@@ -18,7 +18,7 @@ public class JsonStorageProvider : IStorageProvider
 
       var dir = directory ?? Path.Combine(configBase, "termnote");
       Directory.CreateDirectory(dir);
-      _filePath = Path.Combine(dir, "TermNote");
+      _filePath = Path.Combine(dir, "notes.json");
     }
 
   // Save method
