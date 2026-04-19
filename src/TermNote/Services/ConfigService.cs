@@ -57,4 +57,8 @@ public class ConfigService
     }
 
   }
+  public string ConfigPath()
+  {
+    return _filePath;
+  }
 }

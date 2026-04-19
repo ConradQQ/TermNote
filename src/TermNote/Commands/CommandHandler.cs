@@ -10,12 +10,15 @@ public class CommandHandler
   private readonly NoteStore _store;
   private readonly IRenderer _renderer;
   private readonly Config _config;
+  private readonly ConfigService _configService;
+  
 
-  public CommandHandler(NoteStore store, IRenderer renderer, Config config)
+  public CommandHandler(NoteStore store, IRenderer renderer, Config config, ConfigService configService)
   {
     _store = store;
     _renderer = renderer;
     _config = config;
+    _configService = configService;
   }
 
   public int Execute(string[] args)
@@ -66,7 +69,7 @@ public class CommandHandler
 
     Console.WriteLine($"  \x1b[32m✓\x1b[0m Note added:");
     _renderer.RenderInline(note);
-
+    HandleShow();
     return 0;
   }
 
@@ -107,6 +110,7 @@ public class CommandHandler
     if (_store.Remove(id))
     {
       Console.WriteLine("  \x1b[32m✓\x1b[0m Note removed.");
+      HandleShow();
       return 0;
     }
     else
@@ -170,6 +174,10 @@ public class CommandHandler
       PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
     string json = JsonSerializer.Serialize(_config, options);
+    string ExposedFilePath = _configService.ConfigPath();
+
+    Console.WriteLine(ExposedFilePath);
+    Console.WriteLine(" ");
     Console.WriteLine(json);
     return 0;
   }
@@ -187,6 +195,7 @@ public class CommandHandler
     Console.WriteLine("    termnote rm <id>             Remove a note (supports partial IDs)");
     Console.WriteLine("    termnote edit <id> <content> Edit a note's content");
     Console.WriteLine("    termnote clear               Remove all notes");
+    Console.WriteLine("    termnote config              Show current config settings and config file path");
     Console.WriteLine("    termnote help                Show this help");
     Console.WriteLine("    termnote version             Show version");
     Console.WriteLine();

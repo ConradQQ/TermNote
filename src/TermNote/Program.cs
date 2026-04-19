@@ -14,7 +14,7 @@ class Program
         IRenderer renderer = config.Renderer == "box"
         ? new BoxRenderer()
         : new MinimalRenderer();
-        var handler = new CommandHandler(store, renderer, config);
+        var handler = new CommandHandler(store, renderer, config, configService);
 
 
         return handler.Execute(args);
