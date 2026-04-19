@@ -8,9 +8,14 @@ class Program
     {
         var storage = new JsonStorageProvider();
         var store = new NoteStore(storage);
-        var minimalRenderer = new MinimalRenderer();
-        var boxRenderer = new BoxRenderer();
-        var handler = new CommandHandler(store, boxRenderer);
+        var configService = new ConfigService();
+        var config = configService.Load();
+
+        IRenderer renderer = config.Renderer == "box"
+        ? new BoxRenderer()
+        : new MinimalRenderer();
+        var handler = new CommandHandler(store, renderer);
+
 
         return handler.Execute(args);
     }
