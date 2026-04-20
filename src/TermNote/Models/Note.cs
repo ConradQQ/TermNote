@@ -1,14 +1,14 @@
-using System.Runtime.CompilerServices;
-
 namespace TermNote.Models;
 
 public class Note
 {
   public string Id { get; init; }
   public string Content { get; set; }
+  public Priority Priority { get; set; }
+  public List<string> Tags { get; set; } = new List<string>();
   public DateTime CreatedAt { get; init; }
 
-  public Note(string content)
+  public Note(string content, Priority priority = Priority.Medium, List<string>? tags = null)
   {
 
     if (string.IsNullOrWhiteSpace(content))
@@ -19,6 +19,8 @@ public class Note
     Id = Guid.NewGuid().ToString("N")[..4];
     Content = content;
     CreatedAt = DateTime.UtcNow;
+    Priority = priority;
+    Tags = tags ?? [];
   }
 
   private Note()
